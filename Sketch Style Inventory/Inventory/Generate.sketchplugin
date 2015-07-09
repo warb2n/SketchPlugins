@@ -1,0 +1,33 @@
+// Shows a dialog with all actions available from Color Inventory (control alt cmd i)
+
+#import 'inventory.js'
+
+// remember current artboard
+var selectedArtboard = doc.currentPage().currentArtboard();
+
+// get right most artboard if no artboard is selected
+if (selectedArtboard == null) selectedArtboard = com.getflourish.layers.getRightmostArtboard();
+
+var x = selectedArtboard.frame().x();
+
+// file name of the exported file
+var filename = "typography.css"
+
+// let the user choose the export location
+var fileURL = com.getflourish.common.fileSaver();
+path = fileURL.path();
+
+// get authorization to write to the export folder
+new AppSandbox().authorize(path, function () {
+
+	// generate and get the inventories 
+	var ca = com.getflourish.colorInventory.generate();
+
+	// generate the text styles and save them
+	com.getflourish.textStyleInventory.generate(path + "/" + filename)
+
+	// var shiftWidth = ca.frame().width() + ta.frame().width() + 200;
+// 
+	// com.getflourish.colorInventory.shiftArtboardsFromArtboardBy(selectedArtboard, shiftWidth);
+	// ca.frame().setX(selectedArtboard.frame().x(x));
+});

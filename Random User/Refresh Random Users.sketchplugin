@@ -1,0 +1,65 @@
+#import 'randomUserCommon.js'
+
+log ([doc fileUrl]);
+
+var randomUserLayers = [];
+var profileLayers = [];
+
+findRandomUserLayers([[doc currentPage] layers]);
+
+log (randomUserLayers.length);
+
+for (var i = 0; i < randomUserLayers.length; i++)
+{
+
+  var randomUserLayer = randomUserLayers[i];
+  findProfileLayers(randomUserLayer);
+
+  for (var j = 0; j < profileLayers.length; j++)
+  {
+    var user = getRandomUser();
+    var profileLayer = profileLayers[j];
+    insertRandomUser(profileLayer, user);
+  }
+
+  profileLayers = [];
+}
+
+function findRandomUserLayers(layers)
+{
+
+  for (var i = 0; i < [layers count]; i++)
+  {
+    var layer = [layers objectAtIndex:i];
+
+    if ([layer isMemberOfClass:[MSArtboardGroup class]] || [layer isMemberOfClass:[MSLayerGroup class]] )
+    {
+      if ([layer isMemberOfClass:[MSLayerGroup class]] && layer.name().indexOf("randomUser") == 0)
+      {
+        randomUserLayers.push(layer);
+      }
+
+      findRandomUserLayers([layer layers]);
+    }
+  }
+}
+
+function findProfileLayers(randomUserLayer)
+{
+  var layers = [randomUserLayer layers];
+
+  for (var i = 0; i < [layers count]; i++)
+  {
+    var layer = [layers objectAtIndex:i];
+
+    if (layer.name().indexOf("profile:") == 0)
+    {
+      profileLayers.push(layer);
+    }
+
+    if (layer.class() === MSLayerGroup)
+    {
+      findProfileLayers(layer);
+    }
+  }
+}

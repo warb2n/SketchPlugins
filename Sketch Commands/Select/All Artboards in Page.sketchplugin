@@ -1,0 +1,12 @@
+// Select all Artboards in current page,
+// for the purpose of copying or realining with the grid tool.
+
+var page = [doc currentPage],
+    artboards = [page artboards]
+
+[page deselectAllLayers]
+
+var loop = [artboards objectEnumerator]
+while (artboard = loop.nextObject()) {
+  [artboard select:true byExpandingSelection:true]
+}
